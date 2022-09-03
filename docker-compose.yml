@@ -1,0 +1,34 @@
+version: "3.0"
+
+services:
+  app:
+    build: .
+    container_name: app_gourl
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "8090:8090"
+    networks:
+      - netgourl
+    command: go run .
+  dbgourl:
+    image: postgres:9.5
+    restart: always
+    container_name: database_gourl
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: database_gourl
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - netgourl
+    ports:
+      - 5431:5432
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  netgourl:
+    driver: bridge

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <link href="static/css/style.css" type="text/css" rel="stylesheet">
+
+  <link rel=icon href="static/favicon.png" sizes="16x16" type="image/png">
+
+
+  <title>GO.URL - Encurtador de URl</title>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <div class="container-logo">
+        <h2>GO.URL</h2>
+      </div>
+      <div class="diviser"></div>
+    </header>
+
+    <div class="form">
+
+      <form class="action-form" action="/registerhash" method="post">
+        <input placeholder="Insira seu link aqui" type="text" id="url" name="url">
+        <button>GO</button>
+      </form>
+
+      {{if .Error}}
+      <div id="card-error" class="card-alert card-alert-show-error">
+        <span id="text-error">{{.Obs}}</span>
+        <p id="btn-close">X</p>
+      </div>
+      {{else if .Obs}}
+      <div class="ard-alert card-alert-show-success">
+        <span id="link-url" data-link="{{.Obs}}">Clique aqui para copiar sua URL</span>
+      </div>
+      {{else if .Success}}
+      <div class="card-alert"></div>
+      {{end}}
+
+    </div>
+  </div>
+</body>
+
+{{if .Error}}
+<script>
+
+  const btnClose = document.getElementById("btn-close");
+  const cardError = document.getElementById('card-error');
+  const textError = document.getElementById('cartext-error');
+
+  btnClose.addEventListener("click", () => {
+    cardError.classList.remove("card-alert-show-error");
+    cardError.parentElement.removeChild(textError);
+    cardError.parentElement.removeChild(btnClose);
+  });
+
+</script>
+
+{{else if .Obs}}
+<script>
+
+  const linkURL = document.getElementById("link-url");
+
+  linkURL.addEventListener("click", () => {
+    const url = linkURL.dataset.link;
+    navigator.clipboard.writeText(url);
+
+    linkURL.innerText = "Link copiado com sucesso!";
+  });
+
+</script>
+{{end}}
+
+</html>
